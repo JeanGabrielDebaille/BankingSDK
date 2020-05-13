@@ -141,7 +141,40 @@ choice, if you do both of the following:
    is a work based on the Library, and explaining where to find the
    accompanying uncombined form of the same work.
 
-  6. Revised Versions of the GNU Lesser General Public License.
+  6. Restrictions.
+
+  You may not have a commercial usage of the library for the following
+services:
+
+   a) You cannot act as an aggregator and provide bank connectivity to 
+   TPPs.
+
+   b) You cannot provide a service similar to 01banking.com.
+
+  7. Telemetry Service.
+
+  Core components of the library include a telemetry service which sends
+data back to Exthand's API. Telemetry service cannot be, in any way,
+removed, suspended or bypassed. Developers can access telemetry service
+data using BankingSDK's developer portal. All data collected are and 
+must be anonymized regarding the PSU.
+
+  Data sent to the telemtry service are the type of call performed towards
+the bank API and the response received. PSU data have to be anonymized 
+before being sent to the Telemetry service.
+
+  Telemtry data will be used to ensure a connector's compatibility with the
+bank's API and the correct use of the library.
+
+  BankingSDK's developer portal allows developers to analyze:
+  
+   a) Telemetry data of their Application's usage of the library.
+
+   b) Telemetry data of other Applications usage of the library, licensee
+   being anonymized.
+
+
+  8. Revised Versions of the GNU Lesser General Public License.
 
   The Free Software Foundation may publish revised and/or new versions
 of the GNU Lesser General Public License from time to time. Such new
