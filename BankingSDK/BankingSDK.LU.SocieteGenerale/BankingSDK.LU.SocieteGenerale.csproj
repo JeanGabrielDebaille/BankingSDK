@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>BankingSDK.LU.SocieteGenerale.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <AssemblyName>BankingSDK.LU.SocieteGenerale</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Requests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BankingSDK.Common">
+      <HintPath>..\BankingSDK.Common.dll</HintPath>
+    </Reference>
+    <ProjectReference Include="..\BankingSDK.Base.BerlinGroup\BankingSDK.Base.BerlinGroup.csproj" />
+  </ItemGroup>
+
+</Project>
