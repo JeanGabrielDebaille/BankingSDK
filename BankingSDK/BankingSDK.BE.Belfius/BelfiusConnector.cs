@@ -51,7 +51,7 @@ namespace BankingSDK.BE.Belfius
         }
 
         #region User
-        public async Task<BankingResult<IUserContext>> RegisterUser(string userId)
+        public async Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
         {
             _userContext = new BelfiusUserContext
             {
@@ -68,7 +68,7 @@ namespace BankingSDK.BE.Belfius
             return RequestAccountsAccessOption.SingleAccount;
         }
 
-        public async Task<BankingResult<List<Account>>> GetAccounts()
+        public async Task<BankingResult<List<Account>>> GetAccountsAsync()
         {
             try
             {
@@ -98,12 +98,12 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        private async Task<HttpResponseMessage> GetAccount(string token, string accountId)
+        private async Task<HttpResponseMessage> GetAccountAsync(string token, string accountId)
         {
             var client = GetClient();
             client.DefaultRequestHeaders.Add("Accept", "application/vnd.belfius.api+json; version=1");
@@ -116,7 +116,7 @@ namespace BankingSDK.BE.Belfius
             return await client.GetAsync(url);
         }
 
-        public async Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest model)
+        public async Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest model)
         {
             try
             {
@@ -159,12 +159,12 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
             try
             {
@@ -172,12 +172,12 @@ namespace BankingSDK.BE.Belfius
                 var error = query.Get("error");
                 if (error != null)
                 {
-                    await Log(apiUrl, 500, Http.Get, query.Get("error_description"));
+                    await LogAsync(apiUrl, 500, Http.Get, query.Get("error_description"));
                     throw new ApiCallException(query.Get("error_description"));
                 }
                 var code = query.Get("code");
                 var auth = await GetToken(code, flowContext.CodeVerifier, flowContext.RedirectUrl);
-                var result = await GetAccount(auth.Token, auth.logical_id);
+                var result = await GetAccountAsync(auth.Token, auth.logical_id);
 
                 var account = JsonConvert.DeserializeObject<BelfiusAccount>(await result.Content.ReadAsStringAsync());
                 bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
@@ -222,17 +222,17 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await RequestAccountsAccessFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await RequestAccountsAccessFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
 
-        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
         {
             try
             {
@@ -257,14 +257,14 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Balances
-        public async Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+        public async Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
             try
             {
@@ -277,7 +277,7 @@ namespace BankingSDK.BE.Belfius
                 }
 
                 var url = $"/sandbox/psd2/accounts/{accountId}";
-                var result = await GetAccount(account.Token.Token, accountId);
+                var result = await GetAccountAsync(account.Token.Token, accountId);
 
                 string rawData = await result.Content.ReadAsStringAsync();
                 var model = JsonConvert.DeserializeObject<BelfiusAccount>(rawData);
@@ -299,14 +299,14 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Transactions
-        public async Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+        public async Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
         {
             try
             {
@@ -352,14 +352,14 @@ namespace BankingSDK.BE.Belfius
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Payment
-        public async Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest model)
+        public async Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest model)
         {
             var paymentRequest = new BelfiusPaymentRequest
             {
@@ -398,13 +398,13 @@ namespace BankingSDK.BE.Belfius
             return new BankingResult<string>(ResultStatus.REDIRECT, url, ""/*redirect*/, rawData, null/*flowContext: flowContext*/);
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
         {
             var query = HttpUtility.ParseQueryString(queryString);
             var error = query.Get("error");
             if (error != null)
             {
-                await Log(apiUrl, 500, Http.Get, query.Get("error_description"));
+                await LogAsync(apiUrl, 500, Http.Get, query.Get("error_description"));
                 throw new ApiCallException(query.Get("error_description"));
             }
 
@@ -441,9 +441,9 @@ namespace BankingSDK.BE.Belfius
             return new BankingResult<PaymentStatus>(ResultStatus.DONE, url, data, rawData);
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await CreatePaymentInitiationRequestFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await CreatePaymentInitiationRequestFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
         #endregion
 

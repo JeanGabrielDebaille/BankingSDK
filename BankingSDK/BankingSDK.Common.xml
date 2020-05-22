@@ -1,0 +1,440 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BankingSDK.Common</name>
+    </assembly>
+    <members>
+        <member name="T:BankingSDK.Common.Contexts.FlowContext">
+            <summary>
+            Used to store information needed to finalize payment or account access request 
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.FlowContext.Id">
+            <summary>
+            flow Id given by TPP
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.FlowContext.ConnectorType">
+            <summary>
+            conector for which flow was initiated
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.FlowContext.PaymentProperties">
+            <summary>
+            properties used in case of payment flow
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.FlowContext.AccountAccessProperties">
+            <summary>
+            properties used in case of account acces flow
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.FlowContext.FlowType">
+            <summary>
+            informs of type of the flow
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Contexts.AccountAccessProperties">
+            <summary>
+            properties needed to finalize account access request
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.AccountAccessProperties.ConsentId">
+            <summary>
+            consent id
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.AccountAccessProperties.ValidUntil">
+            <summary>
+            validation date of the consent
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.AccountAccessProperties.SingleAccount">
+            <summary>
+            iban for single account access
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.AccountAccessProperties.TransactionAccounts">
+            <summary>
+            list of account to access transactions
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.AccountAccessProperties.BalanceAccounts">
+            <summary>
+            list of account to access balances
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Contexts.PaymentProperties">
+            <summary>
+            properties needed to finalize payment request
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Contexts.PaymentProperties.PaymentId">
+            <summary>
+            payment Id
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Enums.ConnectorType">
+            <summary>
+            Enum listing all the available banks in the SDK
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACCC">
+            <summary>
+            AcceptedSettlementCompleted
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACCP">
+            <summary>
+            AcceptedCustomerProfile
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACSC">
+            <summary>
+            AcceptedSettlementCompleted
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACSP">
+            <summary>
+            AcceptedSettlementInProcess
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACTC">
+            <summary>
+            AcceptedTechnicalValidation
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACWC">
+            <summary>
+            AcceptedWithChange
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.ACWP">
+            <summary>
+            AcceptedWithoutPosting
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.PDNG">
+            <summary>
+            Pending
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.RCVD">
+            <summary>
+            Received
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.RJCT">
+            <summary>
+            Rejected
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.PaymentSatusISO20022.UNKN">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Enums.ResultStatus">
+            <summary>
+            BankingResult status
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.ResultStatus.UNKNOWN">
+            <summary>
+            unknown means... unknown.
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.ResultStatus.DONE">
+            <summary>
+            everything went well, the results are avalable
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.ResultStatus.REDIRECT">
+            <summary>
+            you must do a redirection to complete the flow
+            </summary>
+        </member>
+        <member name="F:BankingSDK.Common.Enums.ResultStatus.ERROR">
+            <summary>
+            something went wrong with the given params, with the call to the bank or processing the response from the bank.
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Interfaces.Contexts.IPagerContext">
+            <summary>
+            This interface allows you to request navigation in the pages of endpoints that are dealing with list (GetTransactions).
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.SetLimit(System.Byte)">
+            <summary>
+            Sets the page size.
+            </summary>
+            <param name="limit"></param>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.GetLimit">
+            <summary>
+            Gets the limit defined in this pager context.(page size)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.NextPage">
+            <summary>
+            Request to move to the next page.
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.PreviousPage">
+            <summary>
+            Request to move to the previous page.
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.FirstPage">
+            <summary>
+            Request to move to the first page.
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.GoToPage(System.UInt32)">
+            <summary>
+            Request to move to a given page.
+            </summary>
+            <param name="page">page number</param>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.RecordCount">
+            <summary>
+            Returns the record count, if available.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.PageCount">
+            <summary>
+            Returns the page count, if available.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.IsFirstPage">
+            <summary>
+            Check if the pager is on the first page.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.IsLastPage">
+            <summary>
+            Check if the pager is on the last page.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.Contexts.IPagerContext.ToJson">
+            <summary>
+            Serialize this object to Json
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BankingSDK.Common.Interfaces.Contexts.IUserContext">
+            <summary>
+            The interface for storing data for the relation between the user and the bank.
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.Interfaces.IBankingConnector">
+            <summary>
+            The interface implemented by all connectors.
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Interfaces.IBankingConnector.UserContext">
+            <summary>
+            Context containing details about user-bank connection
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Interfaces.IBankingConnector.UserContextChanged">
+            <summary>
+            check if user context changed since it got initialized
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.RegisterUserAsync(System.String)">
+            <summary>
+            Registers your user into the system
+            </summary>
+            <param name="user">user information</param>
+            <returns>user context</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.GetRequestAccountsAccessOption">
+            <summary>
+            Returns the user context
+            </summary>
+            <summary>
+            Lets you know what kind of account access request is available for given connector (for RequestAccountsAccess())
+            <list type="number">
+            <listheader>
+            <term>Customizable</term>
+            <description>you can specify accounts for transactions and/or balaces, of leave lists empty to request full access to all available accounts(TransactionAccounts and BalanceAccounts in request)</description>
+            </listheader>
+            <item>
+            <term>NotCustomizable</term>
+            <description>no accounts can be specified on the connector side</description>
+            </item>
+            <item>
+            <term>SingleAccount</term>
+            <description>access can be requested just for single account (set SingleAccount property in the request)</description>
+            </item>
+            </list>
+            </summary>
+            <returns>RequestAccountsAccessOption</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.RequestAccountsAccessAsync(BankingSDK.Common.Models.Request.AccountsAccessRequest)">
+            <summary>
+            Initiate a request for account access towards the bank.
+            </summary>
+            <param name="request">request information model</param>
+            <returns>redirect url</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.RequestAccountsAccessFinalizeAsync(BankingSDK.Common.Contexts.FlowContext,System.String)">
+            <summary>
+            Finalize the request for account access initiated with RequestAccountsAccess().
+            </summary>
+            <param name="flowContext">flow context object</param>
+            <param name="fullUri">full uri to which TPP was redirected after authorizing account access</param>
+            <returns>updated user context</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.RequestAccountsAccessFinalizeAsync(System.String,System.String)">
+            <summary>
+            Finalize the request for account access initiated with RequestAccountsAccess().
+            </summary>
+            <param name="flowContextJson">flow context json</param>
+            <param name="fullUri">full uri to which TPP was redirected after authorizing account access</param>
+            <returns>updated user context</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.DeleteAccountAccessAsync(System.String)">
+            <summary>
+            Delete a consent. Several accounts may be impacted !
+            </summary>
+            <param name="consentId"></param>
+            <returns>the list of accounts that have been impacted by the deletion</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.GetAccountsAsync">
+            <summary>
+            Return the connected accounts, the accounts for which the consent have been given by the PSU.
+            </summary>
+            <returns>List of accounts</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.GetBalancesAsync(System.String)">
+            <summary>
+            Returns balances for given account
+            </summary>
+            <param name="accountId"></param>
+            <returns>list of balances</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.GetTransactionsAsync(System.String,BankingSDK.Common.Interfaces.Contexts.IPagerContext)">
+            <summary>
+            Get the transactions for given account.
+            </summary>
+            <param name="accountId"></param>
+            <param name="context">pager context</param>
+            <returns>transaction list</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.CreatePaymentInitiationRequestAsync(BankingSDK.Common.Models.Request.PaymentInitiationRequest)">
+            <summary>
+            Initiate a new Payment process.
+            </summary>
+            <param name="request">payment request model</param>
+            <returns>redirect url</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.CreatePaymentInitiationRequestFinalizeAsync(BankingSDK.Common.Contexts.FlowContext,System.String)">
+            <summary>
+            Finalize the payment process.
+            </summary>
+            <param name="flowContext">flow context object</param>
+            <param name="fullUri">full uri to which TPP was redirected after authorizing payment</param>
+            <returns>payment status object</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.CreatePaymentInitiationRequestFinalizeAsync(System.String,System.String)">
+            <summary>
+            Finalize the payment process.
+            </summary>
+            <param name="flowContextJson">flow context json</param>
+            <param name="fullUri">full uri to which TPP was redirected after authorizing payment</param>
+            <returns>payment status object</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.RestorePagerContext(System.String)">
+            <summary>
+            Transforms the JSon version of the pager context into the right pager class that suits the connector
+            </summary>
+            <param name="json">pager context json</param>
+            <returns>pager context object</returns>
+        </member>
+        <member name="M:BankingSDK.Common.Interfaces.IBankingConnector.CreatePageContext(System.Byte)">
+            <summary>
+            Creates the PagerContext current connector
+            </summary>
+            <param name="limit">page size</param>
+            <returns>PagerContext speciffic for current connectior</returns>
+        </member>
+        <member name="T:BankingSDK.Common.Models.BankingResult`1">
+            <summary>
+            This is the return parametrized class of bank operations called through BankingConnector interface
+            </summary>
+            <typeparam name="T">type of actual data returned by the called method</typeparam>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetStatus">
+            <summary>
+            Returns the status of the call
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetURL">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetData">
+            <summary>
+            Returns the actual data of the call (account, list of account...)
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetRawResponse">
+            <summary>
+            Returns the raw response of the remote call if available.
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetPagerContext">
+            <summary>
+            Returns the pager context to handle page navigation if applicable
+            </summary>
+        </member>
+        <member name="M:BankingSDK.Common.Models.BankingResult`1.GetFlowContext">
+            <summary>
+            Returns FlowContext for the data that requires further processing. FlowContext is set only in case of status "REDIRECT"
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.Models.Request.AccountsAccessRequest.FrequencyPerDay">
+            <summary>
+            Maximum 4
+            </summary>
+        </member>
+        <member name="T:BankingSDK.Common.BankSettings">
+            <summary>
+            Setting needed to connect to specific bank API
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.BankSettings.NcaId">
+            <summary>
+            NCA Id of TPP
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.BankSettings.AppClientId">
+            <summary>
+            bank specific client Id, if needed
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.BankSettings.AppClientSecret">
+            <summary>
+            bank specific client secret, if needed
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.BankSettings.TlsCertificate">
+            <summary>
+            eIDAS TLS certificate
+            </summary>
+        </member>
+        <member name="P:BankingSDK.Common.BankSettings.SigningCertificate">
+            <summary>
+            eIDAS signing certificate
+            </summary>
+        </member>
+    </members>
+</doc>

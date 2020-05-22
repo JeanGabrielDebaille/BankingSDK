@@ -66,7 +66,7 @@ namespace BankingSDK.Base.BNP
         }
 
         #region User
-        public async Task<BankingResult<IUserContext>> RegisterUser(string userId)
+        public async Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
         {
             _userContext = new BnpUserContext
             {
@@ -83,7 +83,7 @@ namespace BankingSDK.Base.BNP
             return RequestAccountsAccessOption.NotCustomizable;
         }
 
-        public async Task<BankingResult<List<Account>>> GetAccounts()
+        public async Task<BankingResult<List<Account>>> GetAccountsAsync()
         {
             try
             {
@@ -105,12 +105,12 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        private async Task<List<AccountDto>> GetAccounts(string token)
+        private async Task<List<AccountDto>> GetAccountsAsync(string token)
         {
             try
             {
@@ -132,12 +132,12 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log( apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync( apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest model)
+        public async Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest model)
         {
             FlowContext flowContext = new FlowContext
             {
@@ -151,19 +151,19 @@ namespace BankingSDK.Base.BNP
             return new BankingResult<string>(ResultStatus.REDIRECT, "", redirect, null, flowContext: flowContext);
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
             var query = HttpUtility.ParseQueryString(queryString);
             var error = query.Get("error");
             if (error != null)
             {
-                await Log(apiUrl, 500, Http.Get, query.Get("error_description"));
+                await LogAsync(apiUrl, 500, Http.Get, query.Get("error_description"));
                 throw new ApiCallException(query.Get("error_description"));
             }
 
             var code = query.Get("code");
             var auth = await GetToken(code, flowContext.RedirectUrl);
-            var accounts = await GetAccounts($"{auth.token_type} {auth.access_token}");
+            var accounts = await GetAccountsAsync($"{auth.token_type} {auth.access_token}");
 
             _userContextLocal.Tokens.Add(new UserAccessToken
             {
@@ -202,12 +202,12 @@ namespace BankingSDK.Base.BNP
             return new BankingResult<IUserContext>(ResultStatus.DONE, null, _userContext, JsonConvert.SerializeObject(_userContext));
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await RequestAccountsAccessFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await RequestAccountsAccessFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
 
-        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
         {
 
             try
@@ -226,7 +226,7 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
@@ -245,7 +245,7 @@ namespace BankingSDK.Base.BNP
         #endregion
 
         #region Balances
-        public async Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+        public async Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
 
             try
@@ -282,14 +282,14 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Transactions
-        public async Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+        public async Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
         {
             try
             {
@@ -332,14 +332,14 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Payment
-        public async Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest model)
+        public async Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest model)
         {
             try
             {
@@ -477,12 +477,12 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
         {
             try
             {
@@ -531,14 +531,14 @@ namespace BankingSDK.Base.BNP
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(apiUrl, 500, Http.Get, e.ToString());
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await CreatePaymentInitiationRequestFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await CreatePaymentInitiationRequestFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
         #endregion
 

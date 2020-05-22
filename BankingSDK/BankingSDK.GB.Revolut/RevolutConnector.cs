@@ -30,7 +30,7 @@ namespace BankingSDK.GB.Revolut
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest model)
+        public Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest model)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +40,7 @@ namespace BankingSDK.GB.Revolut
             throw new NotImplementedException();
         }
 
-        public async Task<BankingResult<List<Account>>> GetAccounts()
+        public async Task<BankingResult<List<Account>>> GetAccountsAsync()
         {
             var content = new StringContent(
                 "{\"Data\":{\"Permissions\":[\"ReadAccountsDetail\",\"ReadBalances\",\"ReadBeneficiariesDetail\",\"ReadDirectDebits\",\"ReadProducts\",\"ReadStandingOrdersDetail\",\"ReadTransactionsCredits\"," +
@@ -62,17 +62,17 @@ namespace BankingSDK.GB.Revolut
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+        public Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+        public Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RegisterUser(string userId)
+        public Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
         {
             throw new NotImplementedException();
         }
@@ -92,27 +92,27 @@ namespace BankingSDK.GB.Revolut
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest model)
+        public Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
         {
             throw new NotImplementedException();
         }
@@ -122,7 +122,7 @@ namespace BankingSDK.GB.Revolut
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+        public Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
         {
             throw new NotImplementedException();
         }
