@@ -48,7 +48,7 @@ namespace BankingSDK.Base.BerlinGroup
         }
 
         #region User
-        public async Task<BankingResult<IUserContext>> RegisterUser(string userId)
+        public async Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
         {
             _userContext = new BerlinGroupUserContext
             {
@@ -65,7 +65,7 @@ namespace BankingSDK.Base.BerlinGroup
             return RequestAccountsAccessOption.Customizable;
         }
 
-        public async Task<BankingResult<List<Account>>> GetAccounts()
+        public async Task<BankingResult<List<Account>>> GetAccountsAsync()
         {
             try
             {
@@ -79,7 +79,7 @@ namespace BankingSDK.Base.BerlinGroup
                     TransactionsConsent = _userContextLocal.Consents.Where(y => y.ConsentId == x.TransactionsConsentId).Select(c => new ConsentInfo { ConsentId = c.ConsentId, ValidUntil = c.ValidUntil }).FirstOrDefault()
                 }).ToList();
 
-                await Log(_url, 200, Http.Get);
+                await LogAsync(_url, 200, Http.Get);
 
                 return new BankingResult<List<Account>>(ResultStatus.DONE, "", data, JsonConvert.SerializeObject(data));
             }
@@ -89,12 +89,12 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Get, e.ToString());
+                await LogAsync(_url, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        private async Task<List<BerlinGroupAccountDto>> GetAccounts(string consentId, string token)
+        private async Task<List<BerlinGroupAccountDto>> GetAccountsAsync(string consentId, string token)
         {
             var client = GetClient();
             client.DefaultRequestHeaders.Add("Consent-ID", consentId);
@@ -105,7 +105,7 @@ namespace BankingSDK.Base.BerlinGroup
             return JsonConvert.DeserializeObject<BerlinGroupAccountsDto>(rawData).accounts;
         }
 
-        public async Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest model)
+        public async Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest model)
         {
             try
             {
@@ -165,12 +165,12 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Post, e.ToString());
+                await LogAsync(_url, 500, Http.Post, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
             try
             {
@@ -182,7 +182,7 @@ namespace BankingSDK.Base.BerlinGroup
                 }
                 var code = query.Get("code");
                 var auth = await GetToken(code, flowContext.CodeVerifier);
-                var accounts = await GetAccounts(flowContext.AccountAccessProperties.ConsentId, $"{auth.token_type} {auth.access_token}");
+                var accounts = await GetAccountsAsync(flowContext.AccountAccessProperties.ConsentId, $"{auth.token_type} {auth.access_token}");
                 bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
 
                 _userContextLocal.Consents.Add(new BerlinGroupUserConsent
@@ -230,17 +230,17 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Get, e.ToString());
+                await LogAsync(_url, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await RequestAccountsAccessFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await RequestAccountsAccessFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
 
-        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
         {
             try
             {
@@ -266,7 +266,7 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, "DELETE", e.ToString());
+                await LogAsync(_url, 500, "DELETE", e.ToString());
                 throw e;
             }
         }
@@ -294,7 +294,7 @@ namespace BankingSDK.Base.BerlinGroup
         #endregion
 
         #region Balances
-        public async Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+        public async Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
             try
             {
@@ -334,14 +334,14 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Get, e.ToString());
+                await LogAsync(_url, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Transactions
-        public async Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+        public async Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
         {
             try
             {
@@ -385,14 +385,14 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Get, e.ToString());
+                await LogAsync(_url, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
         #endregion
 
         #region Payment
-        public async Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest model)
+        public async Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest model)
         {
             var validate = model.Validate();
             try
@@ -459,12 +459,12 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Post, e.ToString());
+                await LogAsync(_url, 500, Http.Post, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
         {
             try
             {
@@ -513,14 +513,14 @@ namespace BankingSDK.Base.BerlinGroup
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
-                await Log(_url, 500, Http.Get, e.ToString());
+                await LogAsync(_url, 500, Http.Get, e.ToString());
                 throw e;
             }
         }
 
-        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
         {
-            return await CreatePaymentInitiationRequestFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
+            return await CreatePaymentInitiationRequestFinalizeAsync(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
         }
         #endregion
 

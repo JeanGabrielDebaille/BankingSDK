@@ -24,32 +24,32 @@ namespace BankingSDK.ES.Moneytrans
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest request)
+        public Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+        public Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+        public Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<Account>>> GetAccounts()
+        public Task<BankingResult<List<Account>>> GetAccountsAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+        public Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
             throw new NotImplementedException();
         }
@@ -59,27 +59,27 @@ namespace BankingSDK.ES.Moneytrans
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+        public Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RegisterUser(string userId)
+        public Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest request)
+        public Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+        public Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
         {
             throw new NotImplementedException();
         }
