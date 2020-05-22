@@ -94,7 +94,7 @@ namespace BankingSDK.Base.ING
             }
         }
 
-        private async Task<List<IngAccount>> GetAccounts(string token)
+        private async Task<List<IngAccount>> GetAccountsAsync(string token)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace BankingSDK.Base.ING
             var code = query.Get("code");
             var clientToken = await GetClientToken();
             var customerToken = await GetCustomerToken($"{clientToken.token_type} {clientToken.access_token}", code);
-            var accounts = await GetAccounts(customerToken.Token);
+            var accounts = await GetAccountsAsync(customerToken.Token);
 
             _userContextLocal.Tokens.Add(new UserAccessToken
             {

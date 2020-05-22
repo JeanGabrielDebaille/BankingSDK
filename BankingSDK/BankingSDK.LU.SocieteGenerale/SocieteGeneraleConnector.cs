@@ -154,7 +154,7 @@ namespace BankingSDK.LU.SocieteGenerale
                 throw new ApiCallException(query.Get("error_description"));
             }
 
-            var accounts = await GetAccounts(flowContext.AccountAccessProperties.ConsentId);
+            var accounts = await GetAccountsAsync(flowContext.AccountAccessProperties.ConsentId);
             bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
 
             _userContextLocal.Consents.Add(new BerlinGroupUserConsent
@@ -259,7 +259,7 @@ namespace BankingSDK.LU.SocieteGenerale
             }
         }
 
-        private async Task<List<BerlinGroupAccountDto>> GetAccounts(string consentId)
+        private async Task<List<BerlinGroupAccountDto>> GetAccountsAsync(string consentId)
         {
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

@@ -110,7 +110,7 @@ namespace BankingSDK.Base.BNP
             }
         }
 
-        private async Task<List<AccountDto>> GetAccounts(string token)
+        private async Task<List<AccountDto>> GetAccountsAsync(string token)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace BankingSDK.Base.BNP
 
             var code = query.Get("code");
             var auth = await GetToken(code, flowContext.RedirectUrl);
-            var accounts = await GetAccounts($"{auth.token_type} {auth.access_token}");
+            var accounts = await GetAccountsAsync($"{auth.token_type} {auth.access_token}");
 
             _userContextLocal.Tokens.Add(new UserAccessToken
             {

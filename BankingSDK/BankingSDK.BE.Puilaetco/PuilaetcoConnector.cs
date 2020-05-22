@@ -148,7 +148,7 @@ namespace BankingSDK.BE.Puilaetco
                 throw new ApiCallException(query.Get("error_description"));
             }
 
-            var accounts = await GetAccounts(flowContext.AccountAccessProperties.ConsentId);
+            var accounts = await GetAccountsAsync(flowContext.AccountAccessProperties.ConsentId);
             bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
 
             _userContextLocal.Consents.Add(new BerlinGroupUserConsent
@@ -253,7 +253,7 @@ namespace BankingSDK.BE.Puilaetco
             }
         }
 
-        private async Task<List<PuilaetcoAccount>> GetAccounts(string consentId)
+        private async Task<List<PuilaetcoAccount>> GetAccountsAsync(string consentId)
         {
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
