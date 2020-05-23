@@ -11,6 +11,9 @@ using BankingSDK.Common.Enums;
 using BankingSDK.Common.Models;
 using BankingSDK.Common.Models.Request;
 using Microsoft.Extensions.DependencyInjection;
+using BankingSDK.Common.Interfaces.Contexts;
+using System.Collections.Generic;
+using BankingSDK.Common.Models.Data;
 
 namespace TestApp
 {
@@ -40,10 +43,10 @@ namespace TestApp
             string userId = Guid.NewGuid().ToString();
             string userContect = (bankConnector.RegisterUserAsync(userId).Result).GetData().ToJson();
 
-            string callBackUrl = "https://developer.bankingsdk.com/api/callback";
+            string callBackUrl = "https://developer.bankingsdk.com/callback";
 
             AccountsAccessRequest accountsAccessRequest = new AccountsAccessRequest {
-                FlowId = Guid.NewGuid().ToString(),
+                FlowId = SdkApiSettings.ApplicationKey,
                 FrequencyPerDay = 4,
                 RedirectUrl = callBackUrl,
                 PsuIp ="127.0.0.1", 
@@ -54,13 +57,43 @@ namespace TestApp
 
             if (bankingResult.GetStatus() == ResultStatus.REDIRECT)
             {
-                string flowContext = bankingResult.GetFlowContext().ToJson();
+                // We get the flow context.
+                var flowContext = bankingResult.GetFlowContext();
                 string redirectUrlOnTheBank = bankingResult.GetData();
 
-                Process.Start(redirectUrlOnTheBank);
+                var psi = new ProcessStartInfo(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe");
+                psi.Arguments = redirectUrlOnTheBank;
+                Process.Start(psi);
+
+
+                Console.WriteLine("QueryString received?");
+                string queryString = Console.ReadLine();
+
+                BankingResult<IUserContext> result = bankConnector.RequestAccountsAccessFinalizeAsync(flowContext,queryString).Result;
+
+                if(result.GetStatus() == ResultStatus.DONE)
+                {
+                    Console.WriteLine("Ok. Cool.");
+
+                    BankingResult<List<Account>> accounts = bankConnector.GetAccountsAsync().Result;
+                    foreach(Account account in accounts.GetData())
+                    {
+                        Console.WriteLine("Account " + account.Iban);
+
+                        BankingResult<List<Balance>> resultBalances = bankConnector.GetBalancesAsync(account.Iban).Result;
+                        if (resultBalances.GetStatus() == ResultStatus.DONE)
+                        {
+                            List<Balance> accountBalances = resultBalances.GetData();
+                            foreach(Balance balance in accountBalances)
+                            {
+                                Console.WriteLine("  Balance : " + balance.BalanceAmount + " " + balance.ReferenceDate?.ToString("dd MMM yyyy"));
+                            }
+                        }
+                    }
+                }
 
             }
-
+            Console.ReadLine();
             return;
         }
     }
