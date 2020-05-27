@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BankingSDK.Base.BNP\BankingSDK.Base.BNP.csproj" />
     <ProjectReference Include="..\BankingSDK.Base.Stet\BankingSDK.Base.Stet.csproj" />
   </ItemGroup>
 

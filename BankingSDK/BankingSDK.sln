@@ -67,6 +67,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSDK.BE.Belfius", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSDK.AT.ING", "BankingSDK.AT.ING\BankingSDK.AT.ING.csproj", "{7C938733-0119-41B0-8D17-CFDCCDB6D654}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "Test\TestApp\TestApp.csproj", "{910D463D-4E7D-4AB9-9268-2774D305F613}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{517D2F3D-9DC5-4E55-8394-A18194B53A76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSDK.FR.CreditAgricole", "BankingSDK.FR.CreditAgricole\BankingSDK.FR.CreditAgricole.csproj", "{7A447DF0-D3BB-4895-A17B-2803D17FA851}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSDK.Base.Stet", "BankingSDK.Base.Stet\BankingSDK.Base.Stet.csproj", "{91740867-2D2A-4490-B8FD-1BE65946F014}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,9 +209,24 @@ Global
 		{7C938733-0119-41B0-8D17-CFDCCDB6D654}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C938733-0119-41B0-8D17-CFDCCDB6D654}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C938733-0119-41B0-8D17-CFDCCDB6D654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910D463D-4E7D-4AB9-9268-2774D305F613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910D463D-4E7D-4AB9-9268-2774D305F613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910D463D-4E7D-4AB9-9268-2774D305F613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910D463D-4E7D-4AB9-9268-2774D305F613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A447DF0-D3BB-4895-A17B-2803D17FA851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A447DF0-D3BB-4895-A17B-2803D17FA851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A447DF0-D3BB-4895-A17B-2803D17FA851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A447DF0-D3BB-4895-A17B-2803D17FA851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91740867-2D2A-4490-B8FD-1BE65946F014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91740867-2D2A-4490-B8FD-1BE65946F014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91740867-2D2A-4490-B8FD-1BE65946F014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91740867-2D2A-4490-B8FD-1BE65946F014}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{910D463D-4E7D-4AB9-9268-2774D305F613} = {517D2F3D-9DC5-4E55-8394-A18194B53A76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC06302E-678F-4BF6-83FD-F940D2EB99EF}

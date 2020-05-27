@@ -90,8 +90,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<List<Account>>(ResultStatus.DONE, "", data, JsonConvert.SerializeObject(data));
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -168,8 +166,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<string>(ResultStatus.REDIRECT, url, redirect, rawData, flowContext: flowContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -180,56 +176,66 @@ namespace BankingSDK.BE.KBC
 
         public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
         {
-            var query = HttpUtility.ParseQueryString(queryString);
-            var error = query.Get("error");
-            if (error != null)
+            try
             {
-                await LogAsync(apiUrl, 500, Http.Get, query.Get("error_description"));
-                throw new ApiCallException(query.Get("error_description"));
-            }
-            var code = query.Get("code");
-            var auth = await GetToken(code, flowContext.CodeVerifier, flowContext.RedirectUrl);
-            var accounts = await GetAccountsAsync(flowContext.AccountAccessProperties.ConsentId, auth.Token);
-            bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
-
-            _userContextLocal.Consents.Add(new BerlinGroupUserConsent
-            {
-                ConsentId = flowContext.AccountAccessProperties.ConsentId,
-                ValidUntil = flowContext.AccountAccessProperties.ValidUntil,
-                RefreshToken = auth.refresh_token,
-                Token = auth.Token,
-                TokenValidUntil = DateTime.Now.AddSeconds(auth.expires_in - 60)
-            });
-
-            foreach (var account in accounts)
-            {
-                var temp = _userContextLocal.Accounts.FirstOrDefault(x => x.Id == account.resourceId);
-                if (temp != null)
+                var query = HttpUtility.ParseQueryString(queryString);
+                var error = query.Get("error");
+                if (error != null)
                 {
-                    temp.BalancesConsentId = fullAccess || flowContext.AccountAccessProperties.BalanceAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : temp.BalancesConsentId;
-                    temp.TransactionsConsentId = fullAccess || flowContext.AccountAccessProperties.TransactionAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : temp.TransactionsConsentId;
+                    await LogAsync(apiUrl, 500, Http.Get, query.Get("error_description"));
+                    throw new ApiCallException(query.Get("error_description"));
                 }
-                else
+                var code = query.Get("code");
+                var auth = await GetToken(code, flowContext.CodeVerifier, flowContext.RedirectUrl);
+                var accounts = await GetAccountsAsync(flowContext.AccountAccessProperties.ConsentId, auth.Token);
+                bool fullAccess = flowContext.AccountAccessProperties.BalanceAccounts == null && flowContext.AccountAccessProperties.TransactionAccounts == null;
+
+                _userContextLocal.Consents.Add(new BerlinGroupUserConsent
                 {
-                    _userContextLocal.Accounts.Add(new BerlinGroupConsentAccount
+                    ConsentId = flowContext.AccountAccessProperties.ConsentId,
+                    ValidUntil = flowContext.AccountAccessProperties.ValidUntil,
+                    RefreshToken = auth.refresh_token,
+                    Token = auth.Token,
+                    TokenValidUntil = DateTime.Now.AddSeconds(auth.expires_in - 60)
+                });
+
+                foreach (var account in accounts)
+                {
+                    var temp = _userContextLocal.Accounts.FirstOrDefault(x => x.Id == account.resourceId);
+                    if (temp != null)
                     {
-                        Id = account.resourceId,
-                        Iban = account.iban,
-                        Currency = account.currency,
-                        Description = account.name,
-                        BalancesConsentId = fullAccess || flowContext.AccountAccessProperties.BalanceAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : null,
-                        TransactionsConsentId = fullAccess || flowContext.AccountAccessProperties.TransactionAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : null
-                    });
+                        temp.BalancesConsentId = fullAccess || flowContext.AccountAccessProperties.BalanceAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : temp.BalancesConsentId;
+                        temp.TransactionsConsentId = fullAccess || flowContext.AccountAccessProperties.TransactionAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : temp.TransactionsConsentId;
+                    }
+                    else
+                    {
+                        _userContextLocal.Accounts.Add(new BerlinGroupConsentAccount
+                        {
+                            Id = account.resourceId,
+                            Iban = account.iban,
+                            Currency = account.currency,
+                            Description = account.name,
+                            BalancesConsentId = fullAccess || flowContext.AccountAccessProperties.BalanceAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : null,
+                            TransactionsConsentId = fullAccess || flowContext.AccountAccessProperties.TransactionAccounts.Any(y => account.iban == y) ? flowContext.AccountAccessProperties.ConsentId : null
+                        });
+                    }
                 }
-            }
 
-            //cleanup
-            foreach (var consent in _userContextLocal.Consents.Where(x => x.ValidUntil < DateTime.Now).ToList())
+                //cleanup
+                foreach (var consent in _userContextLocal.Consents.Where(x => x.ValidUntil < DateTime.Now).ToList())
+                {
+                    RemoveConsent(consent);
+                }
+
+                return new BankingResult<IUserContext>(ResultStatus.DONE, null, _userContext, JsonConvert.SerializeObject(_userContext));
+            }
+            catch (ApiCallException e) { throw e; }
+            catch (SdkUnauthorizedException e) { throw e; }
+            catch (Exception e)
             {
-                RemoveConsent(consent);
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
+                throw e;
             }
-
-            return new BankingResult<IUserContext>(ResultStatus.DONE, null, _userContext, JsonConvert.SerializeObject(_userContext));
         }
 
         public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
@@ -258,8 +264,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<List<BankingAccount>>(ResultStatus.DONE, url, data, JsonConvert.SerializeObject(data));
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -327,8 +331,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<List<Balance>>(ResultStatus.DONE, url, data, rawData);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -380,8 +382,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<List<Transaction>>(ResultStatus.DONE, url, data, rawData, pagerContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -442,8 +442,6 @@ namespace BankingSDK.BE.KBC
                 return new BankingResult<string>(ResultStatus.REDIRECT, url, paymentResult._links.scaRedirect, rawData, flowContext: flowContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {

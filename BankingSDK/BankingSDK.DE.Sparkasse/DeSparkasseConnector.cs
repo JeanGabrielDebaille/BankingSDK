@@ -63,7 +63,7 @@
 //        }
 
 //        #region User
-//        public async Task<BankingResult<IUserContext>> RegisterUser(string userId)
+//        public async Task<BankingResult<IUserContext>> RegisterUserAsync(string userId)
 //        {
 //            _userContext = new BerlinGroupUserContext
 //            {
@@ -80,7 +80,7 @@
 //            return RequestAccountsAccessOption.Customizable;
 //        }
 
-//        public async Task<BankingResult<List<Account>>> GetAccounts()
+//        public async Task<BankingResult<List<Account>>> GetAccountsAsync()
 //        {
 //            var requestedAt = DateTime.UtcNow;
 //            var watch = Stopwatch.StartNew();
@@ -101,7 +101,7 @@
 //            return new BankingResult<List<Account>>(ResultStatus.DONE, "", data, JsonConvert.SerializeObject(data));
 //        }
 
-//        //private async Task<List<AccountDto>> GetAccounts(string consentId, string token)
+//        //private async Task<List<AccountDto>> GetAccountsAsync(string consentId, string token)
 //        //{
 //        //    var client = GetClient();
 //        //    client.DefaultRequestHeaders.Add("Consent-ID", consentId);
@@ -118,7 +118,7 @@
 //        //    return JsonConvert.DeserializeObject<AccountsDto>(rawData).accounts;
 //        //}
 
-//        public async Task<BankingResult<string>> RequestAccountsAccess(AccountsAccessRequest model)
+//        public async Task<BankingResult<string>> RequestAccountsAccessAsync(AccountsAccessRequest model)
 //        {
 //            var requestedAt = DateTime.UtcNow;
 //            var watch = Stopwatch.StartNew();
@@ -183,7 +183,7 @@
 //            return new BankingResult<string>(ResultStatus.REDIRECT, url, redirect, rawData, flowContext: flowContext);
 //        }
 
-//        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(FlowContext flowContext, string queryString)
+//        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(FlowContext flowContext, string queryString)
 //        {
 //            var query = HttpUtility.ParseQueryString(queryString);
 //            var error = query.Get("error");
@@ -236,12 +236,12 @@
 //            return new BankingResult<IUserContext>(ResultStatus.DONE, null, _userContext, JsonConvert.SerializeObject(_userContext));
 //        }
 
-//        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalize(string flowContextJson, string queryString)
+//        public async Task<BankingResult<IUserContext>> RequestAccountsAccessFinalizeAsync(string flowContextJson, string queryString)
 //        {
 //            return await RequestAccountsAccessFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
 //        }
 
-//        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccess(string consentId)
+//        public async Task<BankingResult<List<BankingAccount>>> DeleteAccountAccessAsync(string consentId)
 //        {
 //            var requestedAt = DateTime.UtcNow;
 //            var watch = Stopwatch.StartNew();
@@ -295,7 +295,7 @@
 //        #endregion
 
 //        #region Balances
-//        public async Task<BankingResult<List<Balance>>> GetBalances(string accountId)
+//        public async Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
 //        {
 //            var requestedAt = DateTime.UtcNow;
 //            var watch = Stopwatch.StartNew();
@@ -343,7 +343,7 @@
 //        #endregion
 
 //        #region Transactions
-//        public async Task<BankingResult<List<Transaction>>> GetTransactions(string accountId, IPagerContext context = null)
+//        public async Task<BankingResult<List<Transaction>>> GetTransactionsAsync(string accountId, IPagerContext context = null)
 //        {
 //            var requestedAt = DateTime.UtcNow;
 //            var watch = Stopwatch.StartNew();
@@ -394,7 +394,7 @@
 //        #endregion
 
 //        #region Payment
-//        public async Task<BankingResult<string>> CreatePaymentInitiationRequest(PaymentInitiationRequest model)
+//        public async Task<BankingResult<string>> CreatePaymentInitiationRequestAsync(PaymentInitiationRequest model)
 //        {
 //            var validate = model.Validate();
 //            var requestedAt = DateTime.UtcNow;
@@ -466,7 +466,7 @@
 //            return new BankingResult<string>(ResultStatus.REDIRECT, url, redirect, rawData, flowContext: flowContext);
 //        }
 
-//        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(FlowContext flowContext, string queryString)
+//        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(FlowContext flowContext, string queryString)
 //        {
 //            var query = HttpUtility.ParseQueryString(queryString);
 //            var error = query.Get("error");
@@ -513,7 +513,7 @@
 //            return new BankingResult<PaymentStatus>(ResultStatus.DONE, url, data, rawData);
 //        }
 
-//        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalize(string flowContextJson, string queryString)
+//        public async Task<BankingResult<PaymentStatus>> CreatePaymentInitiationRequestFinalizeAsync(string flowContextJson, string queryString)
 //        {
 //            return await CreatePaymentInitiationRequestFinalize(JsonConvert.DeserializeObject<FlowContext>(flowContextJson), queryString);
 //        }
