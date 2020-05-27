@@ -14,12 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using BankingSDK.Common.Interfaces.Contexts;
 using System.Collections.Generic;
 using BankingSDK.Common.Models.Data;
+using System.Threading.Tasks;
 
 namespace TestApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var services = new ServiceCollection();
             services.AddBankingSdk();
@@ -41,7 +42,7 @@ namespace TestApp
             //BankingSDK.BE.KBC.BeKbcConnector bankConnector = new BeKbcConnector(generalBankSettings);
 
             string userId = Guid.NewGuid().ToString();
-            string userContect = (bankConnector.RegisterUserAsync(userId).Result).GetData().ToJson();
+            string userContect =  ( await bankConnector.RegisterUserAsync(userId)).GetData().ToJson();
 
             string callBackUrl = "https://developer.bankingsdk.com/callback";
 
@@ -53,7 +54,7 @@ namespace TestApp
                 SingleAccount= "BE91732047678076"
             };
 
-            BankingResult<string> bankingResult = bankConnector.RequestAccountsAccessAsync(accountsAccessRequest).Result;
+            BankingResult<string> bankingResult = await bankConnector.RequestAccountsAccessAsync(accountsAccessRequest);
 
             if (bankingResult.GetStatus() == ResultStatus.REDIRECT)
             {
@@ -69,18 +70,18 @@ namespace TestApp
                 Console.WriteLine("QueryString received?");
                 string queryString = Console.ReadLine();
 
-                BankingResult<IUserContext> result = bankConnector.RequestAccountsAccessFinalizeAsync(flowContext,queryString).Result;
+                BankingResult<IUserContext> result = await bankConnector.RequestAccountsAccessFinalizeAsync(flowContext,queryString);
 
                 if(result.GetStatus() == ResultStatus.DONE)
                 {
                     Console.WriteLine("Ok. Cool.");
 
-                    BankingResult<List<Account>> accounts = bankConnector.GetAccountsAsync().Result;
+                    BankingResult<List<Account>> accounts = await bankConnector.GetAccountsAsync();
                     foreach(Account account in accounts.GetData())
                     {
                         Console.WriteLine("Account " + account.Iban);
 
-                        BankingResult<List<Balance>> resultBalances = bankConnector.GetBalancesAsync(account.Iban).Result;
+                        BankingResult<List<Balance>> resultBalances = await bankConnector.GetBalancesAsync(account.Iban);
                         if (resultBalances.GetStatus() == ResultStatus.DONE)
                         {
                             List<Balance> accountBalances = resultBalances.GetData();

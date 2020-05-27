@@ -84,8 +84,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<List<Account>>(ResultStatus.DONE, "", data, JsonConvert.SerializeObject(data));
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -111,8 +109,6 @@ namespace BankingSDK.Base.ING
                 return model.accounts;
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -147,8 +143,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<string>(ResultStatus.REDIRECT, "", redirect, redirect, flowContext: flowContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -230,8 +224,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<List<BankingAccount>>(ResultStatus.DONE, "", data, JsonConvert.SerializeObject(data));
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -256,7 +248,9 @@ namespace BankingSDK.Base.ING
         #region Balances
         public async Task<BankingResult<List<Balance>>> GetBalancesAsync(string accountId)
         {
-            var clientToken = await GetClientToken();
+            try
+            {
+                var clientToken = await GetClientToken();
             string token;
 
             if (SdkApiSettings.IsSandbox)
@@ -300,6 +294,14 @@ namespace BankingSDK.Base.ING
             }).ToList();
 
             return new BankingResult<List<Balance>>(ResultStatus.DONE, url, data, rawData);
+            }
+            catch (ApiCallException e) { throw e; }
+            catch (SdkUnauthorizedException e) { throw e; }
+            catch (Exception e)
+            {
+                await LogAsync(apiUrl, 500, Http.Get, e.ToString());
+                throw e;
+            }
         }
         #endregion
 
@@ -353,8 +355,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<List<Transaction>>(ResultStatus.DONE, url, data, rawData, pagerContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -427,8 +427,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<string>(ResultStatus.REDIRECT, url, paymentResult._links.scaRedirect, rawData, flowContext: flowContext);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
@@ -485,8 +483,6 @@ namespace BankingSDK.Base.ING
                 return new BankingResult<PaymentStatus>(ResultStatus.DONE, url, data, rawData);
             }
             catch (ApiCallException e) { throw e; }
-            catch (ApiUnauthorizedException e) { throw e; }
-            catch (PagerException e) { throw e; }
             catch (SdkUnauthorizedException e) { throw e; }
             catch (Exception e)
             {
