@@ -149,7 +149,7 @@ services:
    a) You cannot act as an aggregator and provide bank connectivity to 
    TPPs.
 
-   b) You cannot provide a service similar to 01banking.com.
+   b) You cannot provide a service similar to 01Financials as it is explained on www.bankingsdk.com
 
   7. Telemetry Service.
 
