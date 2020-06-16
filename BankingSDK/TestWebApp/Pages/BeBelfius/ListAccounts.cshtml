@@ -1,0 +1,15 @@
+﻿@using BankingSDK.Common.Models.Data
+@model TestWebApp.Models.AccountListViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+<ul>
+    @foreach (Account account in Model.Accounts)
+    {
+        <li>@account.Iban - <a href="@Url.Action("ListTransactions", "BeBelfius")?accountId=@account.Id">Transactions</a> </li>
+    }
+</ul>

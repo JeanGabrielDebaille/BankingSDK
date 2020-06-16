@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BankingSDK.BE.KBC.Models.Requests
+namespace BankingSDK.Base.KBC.Models.Requests
 {
-    internal class KbcPaymentRequest
+    public class KbcPaymentRequest
     {
         public KbcCreditorAccount creditorAccount { get; set; }
         public string creditorName { get; set; }
@@ -14,18 +14,18 @@ namespace BankingSDK.BE.KBC.Models.Requests
         public string requestedExecutionDate { get; set; }
         public string remittanceInformationUnstructured { get; set; } = "";
     }
-    internal class KbcCreditorAccount
+    public class KbcCreditorAccount
     {
         public string iban { get; set; }
     }
 
-    internal class KbcDebtorAccount
+    public class KbcDebtorAccount
     {
         public string iban { get; set; }
         public string currency { get; set; }
     }
 
-    internal class KbcInstructedAmount
+    public class KbcInstructedAmount
     {
         public string amount { get; set; }
         public string currency { get; set; }

@@ -10,8 +10,8 @@ using BankingSDK.Common.Interfaces.Contexts;
 using BankingSDK.Common.Models;
 using BankingSDK.Common.Models.Data;
 using BankingSDK.Common.Models.Request;
-using BankingSDK.BE.KBC.Models;
-using BankingSDK.BE.KBC.Models.Requests;
+using BankingSDK.Base.KBC.Models;
+using BankingSDK.Base.KBC.Models.Requests;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,9 +26,9 @@ using System.Threading.Tasks;
 using System.Web;
 using static System.Net.WebRequestMethods;
 
-namespace BankingSDK.BE.KBC
+namespace BankingSDK.Base.KBC
 {
-    public class BeKbcConnector : SdkBaseConnector, IBankingConnector
+    public class BaseKbcConnector : SdkBaseConnector, IBankingConnector
     {
         private BerlinGroupUserContext _userContextLocal => (BerlinGroupUserContext)_userContext;
         private readonly Uri _sandboxUrl = new Uri("https://be.psd2.sandbox.kbc-group.com");
@@ -49,7 +49,7 @@ namespace BankingSDK.BE.KBC
             }
         }
 
-        public BeKbcConnector(BankSettings settings) : base(settings, ConnectorType.BE_KBC)
+        public BaseKbcConnector(BankSettings settings, ConnectorType connectorType) : base(settings, connectorType)
         {
         }
 
@@ -146,7 +146,23 @@ namespace BankingSDK.BE.KBC
                 {
                     codeChallenge = Convert.ToBase64String(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier))).Replace("=", "").Replace("+", "-").Replace("/", "_");//"IObWtymAvqW35KPIr8Gsl8jbKJUoL7Dx_EijWCvkwEM";
                 }
-                var redirect = $"{apiUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&language=NL&mainCompany=0001&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
+
+                string mainCompany;
+                switch(ConnectorType)
+                {
+                    case ConnectorType.BE_KBC:
+                        mainCompany = "0001";
+                        break;
+                    case ConnectorType.BE_CBC:
+                        mainCompany = "0002";
+                        break;
+                    default:
+                        throw new Exception("Unknown connectr type");
+                }
+
+                // to specify the language add &language=NL
+                //var redirect = $"{apiUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&language=NL&mainCompany={mainCompany}&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
+                var redirect = $"{apiUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&mainCompany={mainCompany}&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
 
                 var flowContext = new FlowContext
                 {
@@ -414,7 +430,8 @@ namespace BankingSDK.BE.KBC
                         currency = model.Currency
                     },
                     endToEndIdentification = model.EndToEndId,
-                    requestedExecutionDate = model.RequestedExecutionDate?.ToString("yyyy-MM-dd")
+                    requestedExecutionDate = model.RequestedExecutionDate?.ToString("yyyy-MM-dd"),
+                    remittanceInformationUnstructured = model.remittanceInformationUnstructured
                 };
 
                 var content = new StringContent(JsonConvert.SerializeObject(paymentRequest), Encoding.UTF8, "application/json");
@@ -516,7 +533,7 @@ namespace BankingSDK.BE.KBC
 
         private async Task<BerlinGroupAccessData> GetToken(string authorizationCode, string codeVerifier, string redirectUrl)
         {
-            var content = new StringContent($"grant_type=authorization_code&code={authorizationCode}&client_id={_settings.NcaId}&client_secret=&redirect_uri={WebUtility.UrlEncode(redirectUrl)}&code_verifier={WebUtility.UrlEncode(codeVerifier)}", Encoding.UTF8, "application/x-www-form-urlencoded");
+            var content = new StringContent($"client_id={_settings.NcaId}&grant_type=authorization_code&redirect_uri={WebUtility.UrlEncode(redirectUrl)}&code={authorizationCode}&code_verifier={WebUtility.UrlEncode(codeVerifier)}");
 
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -527,17 +544,27 @@ namespace BankingSDK.BE.KBC
 
         private async Task RefreshToken(BerlinGroupUserConsent consent)
         {
-            var content = new StringContent($"client_id={_settings.NcaId}&client_secret=&refresh_token={consent.RefreshToken}&grant_type=refresh_token",
-                   Encoding.UTF8, "application/x-www-form-urlencoded");
+            try
+            {
+                var content = new StringContent($"client_id={_settings.NcaId}&grant_type=refresh_token&refresh_token={consent.RefreshToken}",
+                       Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            var client = GetClient();
-            var result = await client.PostAsync($"/ASK/oauth/token/1", content);
+                var client = GetClient();
+                var result = await client.PostAsync($"/ASK/oauth/token/1", content);
 
-            var auth = JsonConvert.DeserializeObject<BerlinGroupAccessData>(await result.Content.ReadAsStringAsync());
-            consent.Token = auth.Token;
-            consent.TokenValidUntil = DateTime.Now.AddSeconds(auth.expires_in - 60);
-            UserContextChanged = true;
-
+                var auth = JsonConvert.DeserializeObject<BerlinGroupAccessData>(await result.Content.ReadAsStringAsync());
+                consent.Token = auth.Token;
+                consent.TokenValidUntil = DateTime.Now.AddSeconds(auth.expires_in - 60);
+                consent.RefreshToken = auth.refresh_token;
+            } catch(Exception e)
+            {
+                // An error occured in refreshing, this is not recoverable. Set the date to yesterday to show it invalid
+                consent.TokenValidUntil = DateTime.Now.AddDays(-1);
+                throw e;
+            } finally
+            {
+                UserContextChanged = true;
+            }
         }
 
         private SdkHttpClient GetClient()

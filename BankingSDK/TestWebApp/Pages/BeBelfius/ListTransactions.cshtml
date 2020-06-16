@@ -1,0 +1,15 @@
+﻿@using BankingSDK.Common.Models.Data
+@model TestWebApp.Models.TransactionListViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+<ul>
+    @foreach (Transaction transaction in Model.Transactions)
+    {
+        <li>@transaction.Amount - @transaction.ValueDate</li>
+    }
+</ul>

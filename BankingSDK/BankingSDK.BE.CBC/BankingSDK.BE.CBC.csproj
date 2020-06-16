@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <Reference Include="BankingSDK.Common">
-      <HintPath>..\..\..\bankingSDK-test-cert\bankingSDK\Connectors\BankingSDK\BankingSDK.Common.dll</HintPath>
+      <HintPath>..\BankingSDK.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
 

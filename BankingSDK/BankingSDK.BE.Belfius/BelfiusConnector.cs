@@ -33,6 +33,7 @@ namespace BankingSDK.BE.Belfius
         private readonly Uri _productionUrl = new Uri("https://psd2.b2b.belfius.be:8443");
 
         private Uri apiUrl => SdkApiSettings.IsSandbox ? _sandboxUrl : _productionUrl;
+        private string basePath => SdkApiSettings.IsSandbox ? "/sandbox/psd2" : "";
 
         public string UserContext
         {
@@ -132,7 +133,7 @@ namespace BankingSDK.BE.Belfius
                     codeChallenge = Convert.ToBase64String(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier)));
                 }
                 client.DefaultRequestHeaders.Add("Code-Challenge", codeChallenge);
-                var url = $"/sandbox/psd2/consent-uris?scope=AIS&iban={model.SingleAccount}";
+                var url = basePath + $"/consent-uris?scope=AIS&iban={model.SingleAccount}";
                 var result = await client.GetAsync(url);
 
                 string rawData = await result.Content.ReadAsStringAsync();

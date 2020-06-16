@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Welcome to Be/Belfius</h2>
+
+<form asp-controller="BeBelfius" asp-action="RequestAccountAccess">
+    <div class="form-control">
+        <label for="account">Enter account number: </label>
+        <input id="account" name="account"/>
+    </div>
+</form>

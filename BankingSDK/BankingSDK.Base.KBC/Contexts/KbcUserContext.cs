@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BankingSDK.BE.KBC.Contexts
+namespace BankingSDK.Base.KBC.Contexts
 {
     public class KbcUserContext : IUserContext
     {
