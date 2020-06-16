@@ -1,0 +1,11 @@
+﻿@using TestWebApp.Models
+@model TestWebApp.Models.Storage
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Authenticating</h2>
+Click on the following link to authorize access to you account :<br/>
+<a class="btn btn-primary" href="@Storage.SCAUrl">Authorize</a>

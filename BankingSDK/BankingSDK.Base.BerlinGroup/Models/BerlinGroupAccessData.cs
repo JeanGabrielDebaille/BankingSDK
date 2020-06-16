@@ -10,7 +10,7 @@ namespace BankingSDK.Base.BerlinGroup.Models
         {
             get
             {
-                return $"{token_type} {access_token}";
+                return $"{token_type[0].ToString().ToUpper() + token_type.Substring(1).ToLower()} {access_token}";
             }
         }
         public string access_token { get; set; }

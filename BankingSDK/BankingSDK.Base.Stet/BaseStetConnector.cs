@@ -118,7 +118,7 @@ namespace BankingSDK.Base.Stet
                 var client =GetClient();
                 client.DefaultRequestHeaders.Add("Authorization", token);
 
-                var url = $"/v1/accounts{(SdkApiSettings.IsSandbox ? (ConnectorType == ConnectorType.BE_HelloBank ? "?brand=hb" : (ConnectorType == ConnectorType.BE_Fintro ? "?brand=fintro" : "")) : "bnppf")}";
+                var url = $"/psd2/v1/accounts{(SdkApiSettings.IsSandbox ? (ConnectorType == ConnectorType.BE_HelloBank ? "?brand=hb" : (ConnectorType == ConnectorType.BE_Fintro ? "?brand=fintro" : "")) : "")}";
                 client.SignRequest(_settings.SigningCertificate, HttpMethod.Get, url, _settings.PemFileUrl);
                 var result = await client.GetAsync(url);
 
