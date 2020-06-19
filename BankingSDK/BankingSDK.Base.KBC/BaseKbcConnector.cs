@@ -35,7 +35,7 @@ namespace BankingSDK.Base.KBC
         private readonly Uri _productionUrl = new Uri("https://openapi.kbc-group.com");
 
         private Uri apiUrl => SdkApiSettings.IsSandbox ? _sandboxUrl : _productionUrl;
-
+        private string RedirectUrl => SdkApiSettings.IsSandbox ? "https://be.psd2.sandbox.kbc-group.com" : "https://idp.kbc.com";
 
         public string UserContext
         {
@@ -162,7 +162,7 @@ namespace BankingSDK.Base.KBC
 
                 // to specify the language add &language=NL
                 //var redirect = $"{apiUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&language=NL&mainCompany={mainCompany}&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
-                var redirect = $"{apiUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&mainCompany={mainCompany}&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
+                var redirect = $"{RedirectUrl}/ASK/oauth/authorize/1?client_id={_settings.NcaId}&redirect_uri={WebUtility.UrlEncode(model.RedirectUrl)}&response_type=code&scope={WebUtility.UrlEncode($"AIS:{accountAccessResult.consentId}")}&state={model.FlowId}&mainCompany={mainCompany}&code_challenge={WebUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
 
                 var flowContext = new FlowContext
                 {
@@ -479,6 +479,7 @@ namespace BankingSDK.Base.KBC
 
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("PSU-IP-Address", "80.80.0.0"); // should be mandatory but bug in KBC side code
             var url = $"/psd2/v2/payments/sepa-credit-transfers/{flowContext.PaymentProperties.PaymentId}/status";
             var result = await client.GetAsync(url);
 
