@@ -479,7 +479,7 @@ namespace BankingSDK.Base.KBC
 
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("PSU-IP-Address", "80.80.0.0"); // should be mandatory but bug in KBC side code
+            client.DefaultRequestHeaders.Add("PSU-IP-Address", "80.80.0.0"); // shouldn't be mandatory but bug in KBC side code
             var url = $"/psd2/v2/payments/sepa-credit-transfers/{flowContext.PaymentProperties.PaymentId}/status";
             var result = await client.GetAsync(url);
 
