@@ -375,6 +375,7 @@ namespace BankingSDK.Base.KBC
                 }
                 client.DefaultRequestHeaders.Add("Authorization", consent.Token);
                 var url = $"/psd2/v2/accounts/{accountId}/transactions{pagerContext.GetRequestParams()}";
+                url = $"/psd2/v2/accounts/{accountId}/transactions";
                 var result = await client.GetAsync(url);
 
 
