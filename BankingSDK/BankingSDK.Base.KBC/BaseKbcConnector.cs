@@ -388,7 +388,7 @@ namespace BankingSDK.Base.KBC
                 {
                     Id = x.transactionId,
                     Amount = x.transactionAmount.amount,
-                    CounterpartReference = x.creditorAccount.iban,
+                    CounterpartReference = x.creditorAccount?.iban,
                     CounterpartName = x.creditorName,
                     Currency = x.transactionAmount.currency,
                     Description = x.remittanceInformationUnstructured,
@@ -535,8 +535,10 @@ namespace BankingSDK.Base.KBC
 
         private async Task<BerlinGroupAccessData> GetToken(string authorizationCode, string codeVerifier, string redirectUrl)
         {
-            var content = new StringContent($"client_id={_settings.NcaId}&grant_type=authorization_code&redirect_uri={WebUtility.UrlEncode(redirectUrl)}&code={authorizationCode}&code_verifier={WebUtility.UrlEncode(codeVerifier)}");
+            //var content = new StringContent($"client_id={_settings.NcaId}&grant_type=authorization_code&redirect_uri={WebUtility.UrlEncode(redirectUrl)}&code={authorizationCode}&code_verifier={WebUtility.UrlEncode(codeVerifier)}", Encoding.UTF8, );
+            var query = $"client_id={_settings.NcaId}&grant_type=authorization_code&redirect_uri={WebUtility.UrlEncode(redirectUrl)}&code={authorizationCode}&code_verifier={WebUtility.UrlEncode(codeVerifier)}";
 
+            var content = new StringContent(query, Encoding.UTF8, "application/x-www-form-urlencoded");
             var client = GetClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var result = await client.PostAsync($"/ASK/oauth/token/1", content);
