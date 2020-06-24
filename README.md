@@ -1,4 +1,4 @@
-# Welcome on BankingSDK-PSD2-OpenBanking
+# Welcome on BankingSDK, the PSD2/OpenBanking open source solution to connect to bank APIs.
 
 To start using BankingSDK, you have to :
 
