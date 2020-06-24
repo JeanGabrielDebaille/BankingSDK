@@ -156,8 +156,11 @@ namespace BankingSDK.Base.KBC
                     case ConnectorType.BE_CBC:
                         mainCompany = "0002";
                         break;
+                    case ConnectorType.BE_KBC_BRUSSELS:
+                        mainCompany = "0001&company=9998";
+                        break;
                     default:
-                        throw new Exception("Unknown connectr type");
+                        throw new Exception("Unknown connector type");
                 }
 
                 // to specify the language add &language=NL

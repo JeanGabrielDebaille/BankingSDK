@@ -6,7 +6,7 @@ namespace BankingSDK.BE.EuropaBank
 {
     public class BeEuropaBankConnector : BaseBerlinGroupConnector
     {
-        public BeEuropaBankConnector(BankSettings settings) : base(settings, "https://sandbox-api.tpp.europabank.be", "https://api.tpp.europabank.be", ConnectorType.BE_EuropaBank)
+        public BeEuropaBankConnector(BankSettings settings) : base(settings, "https://sandbox-api.tpp.europabank.be", "https://api.tpp.europabank.be", ConnectorType.BE_EUROPA_BANK)
         {
         }
     }
