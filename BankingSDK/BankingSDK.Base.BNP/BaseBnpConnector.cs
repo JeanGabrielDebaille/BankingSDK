@@ -117,7 +117,7 @@ namespace BankingSDK.Base.BNP
                 var client =GetClient();
                 client.DefaultRequestHeaders.Add("Authorization", token);
 
-                var url = $"/v1/accounts{(SdkApiSettings.IsSandbox ? (ConnectorType == ConnectorType.BE_HelloBank ? "?brand=hb" : (ConnectorType == ConnectorType.BE_Fintro ? "?brand=fintro" : "")) : "bnppf")}";
+                var url = $"/v1/accounts{(SdkApiSettings.IsSandbox ? (ConnectorType == ConnectorType.BE_HELLO_BANK ? "?brand=hb" : (ConnectorType == ConnectorType.BE_FINTRO ? "?brand=fintro" : "")) : "bnppf")}";
                 client.SignRequest(_settings.SigningCertificate, HttpMethod.Get, url, _settings.PemFileUrl);
                 var result = await client.GetAsync(url);
 
@@ -146,7 +146,7 @@ namespace BankingSDK.Base.BNP
                 FlowType = FlowType.AccountsAccess,
                 RedirectUrl = model.RedirectUrl
             };
-            var brand = ConnectorType == ConnectorType.BE_HelloBank ? "hb" : (ConnectorType == ConnectorType.BE_Fintro ? "fintro" : "bnppf");
+            var brand = ConnectorType == ConnectorType.BE_HELLO_BANK ? "hb" : (ConnectorType == ConnectorType.BE_FINTRO ? "fintro" : "bnppf");
             var redirect = $"{authUrl2}/authorize?response_type=code&client_id={_settings.AppClientId}&redirect_uri={WebUtility.UrlEncode($"{model.RedirectUrl}")}&scope=aisp&state={model.FlowId}&brand={brand}";
             return new BankingResult<string>(ResultStatus.REDIRECT, "", redirect, null, flowContext: flowContext);
         }

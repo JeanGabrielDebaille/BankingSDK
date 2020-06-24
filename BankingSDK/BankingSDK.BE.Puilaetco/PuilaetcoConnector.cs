@@ -38,7 +38,7 @@ namespace BankingSDK.BE.Puilaetco
             set => _userContext = JsonConvert.DeserializeObject<BerlinGroupUserContext>(value);
         }
 
-        public BePuilaetcoConnector(BankSettings settings) : base(settings, ConnectorType.BE_Puilaetco)
+        public BePuilaetcoConnector(BankSettings settings) : base(settings, ConnectorType.BE_PUILAETCO_DEWAAY)
         {
 
         }

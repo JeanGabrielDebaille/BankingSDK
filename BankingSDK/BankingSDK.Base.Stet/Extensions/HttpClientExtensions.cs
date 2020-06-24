@@ -1,6 +1,7 @@
 ﻿using BankingSDK.Common;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -14,7 +15,7 @@ namespace BankingSDK.Base.Stet.Extensions
         {
             var signingString = $"(request-target): {method.Method.ToLower()} {path}\n(created): {GetNumericTime(DateTime.Now)}\n(expires): {GetNumericTime(DateTime.Now.AddSeconds(40))}\nx-request-id: {client.DefaultRequestHeaders.GetValues("X-Request-ID").First()}\ndigest: {client.DefaultRequestHeaders.GetValues("Digest").First()}";
             var headerList = "(request-target) (created) (expires) host x-request-id digest";
-            var signature = Convert.ToBase64String(cert.GetRSAPrivateKey().SignData(Encoding.UTF8.GetBytes(signingString), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+            var signature = WebUtility.UrlEncode(Convert.ToBase64String(cert.GetRSAPrivateKey().SignData(Encoding.UTF8.GetBytes(signingString), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1)));
 
             var signatureHeader = $"signature:keyId=\"{keyId}\",algorithm=\"RS256\",headers=\"{headerList}\",signature=\"{signature}\"";
             client.DefaultRequestHeaders.Add("Signature", signatureHeader);

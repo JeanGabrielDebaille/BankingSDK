@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BankingSDK.Base.BerlinGroup\BankingSDK.Base.BerlinGroup.csproj" />
+    <ProjectReference Include="..\BankingSDK.Base.KBC\BankingSDK.Base.KBC.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -47,7 +47,7 @@ namespace BankingSDK.BE.Belfius
             }
         }
 
-        public BeBelfiusConnector(BankSettings settings):base(settings, ConnectorType.BE_Belfius)
+        public BeBelfiusConnector(BankSettings settings):base(settings, ConnectorType.BE_BELFIUS)
         {
         }
 

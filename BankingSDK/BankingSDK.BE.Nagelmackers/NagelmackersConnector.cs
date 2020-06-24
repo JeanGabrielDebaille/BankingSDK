@@ -6,7 +6,7 @@ namespace BankingSDK.BE.Nagelmackers
 {
     public class BeNagelmackersConnector : BaseBerlinGroupConnector
     {
-        public BeNagelmackersConnector(BankSettings settings) : base(settings, "https://openbankingsandbox.nagelmackers.be", "https://openbankingapi.nagelmackers.be", ConnectorType.BE_Nagelmackers)
+        public BeNagelmackersConnector(BankSettings settings) : base(settings, "https://openbankingsandbox.nagelmackers.be", "https://openbankingapi.nagelmackers.be", ConnectorType.BE_NAGELMACKERS)
         {
         }
     }
