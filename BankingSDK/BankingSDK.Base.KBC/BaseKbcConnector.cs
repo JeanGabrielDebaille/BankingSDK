@@ -173,6 +173,7 @@ namespace BankingSDK.Base.KBC
                     ConnectorType = ConnectorType,
                     FlowType = FlowType.AccountsAccess,
                     CodeVerifier = codeVerifier,
+                    RedirectUrl = model.RedirectUrl,
                     AccountAccessProperties = new AccountAccessProperties
                     {
                         ConsentId = accountAccessResult.consentId,
