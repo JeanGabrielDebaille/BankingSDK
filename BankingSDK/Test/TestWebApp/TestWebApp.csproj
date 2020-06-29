@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="BankingSDK.Common">
-      <HintPath>..\BankingSDK.Common.dll</HintPath>
+      <HintPath>..\..\BankingSDK.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
 
