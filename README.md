@@ -19,8 +19,14 @@ Using the GitHub version is fine for development/testing purpose.
 
 PDF documentation file is available from Download page of the developer portal.
 In the GitHub repo, you can find two test programs. One is a console app while the second is a webapp.
-Both show you how to develop a new connector PDF documentation explains how to use the DLL version.
+Both are examples of how to use bankingSDK's DLL version.
 
 You're started!
+
+## 4. In need of a new connector?
+
+Simply fork the GitHub repo and have a look at an already up and running connector like the BE_KBC one.
+This will give you a correct overview of the job you have to do.
+This is a 2 days work or something like that. Contact us for more help if needed. We are working on a "step-by-step" documenation of what you need to do to add a new connector. It's coming! ;)
 
 
