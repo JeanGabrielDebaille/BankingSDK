@@ -270,3 +270,5 @@ __pycache__/
 /ExAPI/Uploads/*
 !/ExAPI/Uploads/__PLACEHOLDER.txt
 /EdebexExtApi/Uploads
+/BankingSDK/Test/TestWebApp/Properties/PublishProfiles/EH-SRV-WA-01B-TESTPROD-WEB - Web Deploy.pubxml
+/BankingSDK/Test/TestWebApp/.config/dotnet-tools.json
