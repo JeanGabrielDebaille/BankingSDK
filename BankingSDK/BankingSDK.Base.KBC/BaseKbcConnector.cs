@@ -392,8 +392,8 @@ namespace BankingSDK.Base.KBC
                 {
                     Id = x.transactionId,
                     Amount = x.transactionAmount.amount,
-                    CounterpartReference = x.creditorAccount?.iban,
-                    CounterpartName = x.creditorName,
+                    CounterpartReference = x.transactionAmount.amount >= Decimal.Zero ? x.debtorAccount?.iban : x.creditorAccount?.iban,
+                    CounterpartName = x.transactionAmount.amount >= Decimal.Zero ? x.debtorName : x.creditorName,
                     Currency = x.transactionAmount.currency,
                     Description = x.remittanceInformationUnstructured,
                     ExecutionDate = x.bookingDate,

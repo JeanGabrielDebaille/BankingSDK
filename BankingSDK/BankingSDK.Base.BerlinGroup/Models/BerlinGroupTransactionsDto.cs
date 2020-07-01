@@ -23,7 +23,7 @@ namespace BankingSDK.Base.BerlinGroup.Models
         public decimal amount { get; set; }
     }
 
-    public class BerlinGroupCreditorAccount
+    public class BerlinGroupCreditorDebtorAccount
     {
         public string iban { get; set; }
     }
@@ -35,7 +35,9 @@ namespace BankingSDK.Base.BerlinGroup.Models
         public DateTime valueDate { get; set; }
         public BerlinGroupTransactionAmount transactionAmount { get; set; }
         public string creditorName { get; set; }
-        public BerlinGroupCreditorAccount creditorAccount { get; set; }
+        public BerlinGroupCreditorDebtorAccount creditorAccount { get; set; }
+        public string debtorName { get; set; }
+        public BerlinGroupCreditorDebtorAccount debtorAccount { get; set; }
         public string remittanceInformationUnstructured { get; set; }
     }
 
