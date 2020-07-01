@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BankingSDK.BE.Belfius\BankingSDK.BE.Belfius.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="BankingSDK.Common">
       <HintPath>..\..\BankingSDK.Common.dll</HintPath>
     </Reference>
@@ -23,22 +19,22 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Pages\Belfius\Index.cshtml">
+    <Content Update="Views\BeBelfius\RequestAccountAccess.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Pages\BeBelfius\RequestAccountAccess.cshtml">
+    <Content Update="Views\BeBelfius\ListAccounts.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Pages\BeBelfius\ListAccounts.cshtml">
+    <Content Update="Views\BeBelfius\ListTransactions.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Pages\BeBelfius\ListTransactions.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BankingSDK.BE.Belfius\BankingSDK.BE.Belfius.csproj" />
   </ItemGroup>
 
 </Project>

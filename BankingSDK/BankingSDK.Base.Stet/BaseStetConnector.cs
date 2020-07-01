@@ -257,7 +257,7 @@ namespace BankingSDK.Base.Stet
                 client.DefaultRequestHeaders.Add("Authorization", accessToken.FullToken);
 
 
-                var url = $"/v1/accounts/{accountId}/balances";
+                var url = $"/psd2/v1/accounts/{accountId}/balances";
                 client.SignRequest(_settings.SigningCertificate, HttpMethod.Get, url, _settings.PemFileUrl);
                 var result = await client.GetAsync(url);
 
@@ -302,7 +302,8 @@ namespace BankingSDK.Base.Stet
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Add("Authorization", accessToken.FullToken);
 
-                var url = $"/v1/accounts/{accountId}/transactions{pagerContext.GetRequestParams()}";
+                // var url = $"/psd2/v1/accounts/{accountId}/transactions{pagerContext.GetRequestParams()}";
+                var url = $"/psd2/v1/accounts/{accountId}/transactions";
 
                 client.SignRequest(_settings.SigningCertificate, HttpMethod.Get, url, _settings.PemFileUrl);
                 var result = await client.GetAsync(url);
@@ -312,8 +313,8 @@ namespace BankingSDK.Base.Stet
                 if (result.StatusCode != System.Net.HttpStatusCode.NoContent)
                 {
                     var model = JsonConvert.DeserializeObject<TransactionsDto>(rawData);
-                    pagerContext.SetTotal((uint)model.pagination.rowCount);
-                    pagerContext.SetPageTotal((uint)model.pagination.pageCount);
+                    // pagerContext.SetTotal((uint)model.pagination.rowCount);
+                    // pagerContext.SetPageTotal((uint)model.pagination.pageCount);
 
                     data = model.transactions?.Select(x => new Transaction
                     {

@@ -11,8 +11,10 @@ namespace TestWebApp.Models
         public string AppClientId { get; set; }
         public string AppClientSecret { get; set; }
         public string TlsCertificateName { get; set; }
+        public string TlsCertificateThumbprint { get; set; }
         public string TlsCertificatePassword { get; set; }
         public string SigningCertificateName { get; set; }
+        public string SigningCertificateThumbprint { get; set; }
         public string SigningCertificatePassword { get; set; }
         public string PemFileUrl { get; set; }
     }

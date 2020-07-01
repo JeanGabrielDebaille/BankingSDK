@@ -45,13 +45,68 @@ namespace TestWebApp
             DefaultBankSettings defaultBankSettings = new DefaultBankSettings();
             Configuration.GetSection("DefaultBankSettings").Bind(defaultBankSettings);
 
+            X509Certificate2 tlsCertificate = null;
+            X509Certificate2 signingCertificate = null;
+
+            if (!string.IsNullOrEmpty(defaultBankSettings.TlsCertificateThumbprint))
+            {
+                using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+                {
+                    certStore.Open(OpenFlags.ReadOnly);
+
+                    X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                        X509FindType.FindByThumbprint,
+                        // Replace below with your certificate's thumbprint
+                        defaultBankSettings.TlsCertificateThumbprint,
+                        true);
+                    // Get the first cert with the thumbprint
+                    tlsCertificate = certCollection.OfType<X509Certificate2>().FirstOrDefault();
+
+                    if (tlsCertificate is null)
+                    {
+                        throw new Exception(
+                            $"Certificate with thumbprint {defaultBankSettings.TlsCertificateThumbprint} was not found");
+                    }
+                }
+            }
+            else
+            {
+                tlsCertificate = new X509Certificate2(defaultBankSettings.TlsCertificateName,
+                    defaultBankSettings.TlsCertificatePassword);
+            }
+
+            if (!string.IsNullOrEmpty(defaultBankSettings.SigningCertificateThumbprint))
+            {
+                using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+                {
+                    certStore.Open(OpenFlags.ReadOnly);
+
+                    X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                        X509FindType.FindByThumbprint,
+                        // Replace below with your certificate's thumbprint
+                        defaultBankSettings.SigningCertificateThumbprint,
+                        true);
+                    // Get the first cert with the thumbprint
+                    signingCertificate = certCollection.OfType<X509Certificate2>().FirstOrDefault();
+
+                    if (signingCertificate is null)
+                    {
+                        throw new Exception(
+                            $"Certificate with thumbprint {defaultBankSettings.SigningCertificateThumbprint} was not found");
+                    }
+                }
+            }
+            else
+            {
+                signingCertificate = new X509Certificate2(defaultBankSettings.SigningCertificateName,
+                    defaultBankSettings.SigningCertificatePassword);
+            }
+
             Storage.BankSettings = new BankSettings
             {
                 NcaId = defaultBankSettings.NcaId,
-                TlsCertificate = new X509Certificate2(defaultBankSettings.TlsCertificateName,
-                    defaultBankSettings.TlsCertificatePassword),
-                SigningCertificate = new X509Certificate2(defaultBankSettings.SigningCertificateName,
-                    defaultBankSettings.SigningCertificatePassword),
+                TlsCertificate = tlsCertificate,
+                SigningCertificate = signingCertificate,
                 AppClientId = defaultBankSettings.AppClientId,
                 AppClientSecret = defaultBankSettings.AppClientSecret,
                 PemFileUrl = defaultBankSettings.PemFileUrl
