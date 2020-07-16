@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BankingSDK.UK.HSBC\BankingSDK.UK.HSBC.csproj" />
+    <ProjectReference Include="..\..\BankingSDK.UK.HSBC\BankingSDK.GB.HSBC.csproj" />
   </ItemGroup>
 
   <ItemGroup>

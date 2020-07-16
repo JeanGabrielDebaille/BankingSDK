@@ -26,7 +26,7 @@ using static System.Net.WebRequestMethods;
 
 namespace BankingSDK.UK.Hsbc
 {
-    public class UkHsbcConnector : SdkBaseConnector, IBankingConnector
+    public class GbHsbcConnector : SdkBaseConnector, IBankingConnector
     {
         private HsbcUserContext _userContextLocal => (HsbcUserContext)_userContext;
 
@@ -43,12 +43,12 @@ namespace BankingSDK.UK.Hsbc
             set => _userContext = JsonConvert.DeserializeObject<HsbcUserContext>(value);
         }
 
-        public UkHsbcConnector(BankSettings settings, string countryCode, ConnectorType connectorType) : base(settings, connectorType)
+        public GbHsbcConnector(BankSettings settings, string countryCode, ConnectorType connectorType) : base(settings, connectorType)
         {
             _countryCode = countryCode;
         }
 
-        public UkHsbcConnector(BankSettings settings, string countryCode, int connectorID) : base(settings, connectorID)
+        public GbHsbcConnector(BankSettings settings, string countryCode, int connectorID) : base(settings, connectorID)
         {
             _countryCode = countryCode;
         }

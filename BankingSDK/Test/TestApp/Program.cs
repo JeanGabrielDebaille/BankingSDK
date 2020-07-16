@@ -39,7 +39,7 @@ namespace TestApp
 
             //BankingSDK.BE.ING.BeIngConnector bankConnector = new BeIngConnector(generalBankSettings);
             //BankingSDK.BE.KBC.BeKbcConnector bankConnector = new BeKbcConnector(generalBankSettings);
-            UkHsbcConnector bankConnector = new UkHsbcConnector(generalBankSettings,"UK", 32);
+            GbHsbcConnector bankConnector = new GbHsbcConnector(generalBankSettings,"GB", 32);
 
             string userId = Guid.NewGuid().ToString();
             string userContect =  ( await bankConnector.RegisterUserAsync(userId)).GetData().ToJson();

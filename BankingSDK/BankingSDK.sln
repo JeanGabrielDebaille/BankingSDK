@@ -83,7 +83,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "Test\TestWebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSDK.BE.KBCBrussels", "BankingSDK.BE.KBCBrussels\BankingSDK.BE.KBCBrussels.csproj", "{9EDA4230-A344-4C61-86A3-6693CC333B93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingSDK.UK.HSBC", "BankingSDK.UK.HSBC\BankingSDK.UK.HSBC.csproj", "{945DDC0A-963C-427A-991B-45A6B86388BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingSDK.GB.HSBC", "BankingSDK.UK.HSBC\BankingSDK.GB.HSBC.csproj", "{945DDC0A-963C-427A-991B-45A6B86388BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
