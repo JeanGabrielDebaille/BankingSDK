@@ -18,7 +18,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -254,10 +256,53 @@ namespace BankingSDK.UK.Hsbc
         #endregion
 
         #region Private
+
+
+        public static async Task<string> CreateJWTAsync(X509Certificate2 signingCert)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            X509SecurityKey privateKey = new X509SecurityKey(signingCert);
+            // Create JWToken
+            var token = tokenHandler.CreateJwtSecurityToken(issuer: "6ffc4352-661f-49df-8666-3d2f05196584",
+                audience: "https://sandbox.hsbc.com/psd2/obie/v3.1/as/token.oauth2",
+                subject: new System.Security.Claims.ClaimsIdentity(new List<Claim> { new Claim("sub", "6ffc4352-661f-49df-8666-3d2f05196584") }),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials:
+                new SigningCredentials(privateKey,
+                        SecurityAlgorithms.RsaSha256));
+
+            return tokenHandler.WriteToken(token);
+        }
+
         private async Task<HsbcAccessData> GetClientToken()
         {
-            throw new Exception("NOT IMPLEMENTED");
-            //return JsonConvert.DeserializeObject<HsbcAccessData>(await result.Content.ReadAsStringAsync());
+            var jwt = await CreateJWTAsync(_settings.SigningCertificate);
+            //var content = new StringContent(jwt, Encoding.UTF8, "application/jwt");
+            HttpClientHandler handler = new HttpClientHandler();
+
+            handler.ClientCertificates.Add(_settings.TlsCertificate);
+            var client = new HttpClient(handler);
+            client.BaseAddress = new Uri("https://sandbox.hsbc.com");
+            //var result = await client.PostAsync("/psd2/obie/v3.1/register", content);
+
+            //if (!result.IsSuccessStatusCode)
+            //{
+            //    throw new Exception(await result.Content.ReadAsStringAsync());
+            //}
+
+            var content = new StringContent($"grant_type=client_credentials&scope=accounts&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&client_assertion={jwt}", Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            var result = await client.PostAsync("/psd2/obie/v3.1/as/token.oauth2", content);
+
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new Exception(await result.Content.ReadAsStringAsync());
+            }
+
+
+            string rvalue = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<HsbcAccessData>(rvalue);
         }
 
         private async Task<HsbcAccessData> GetCustomerToken(string token, string authorizationCode)
